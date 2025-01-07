@@ -64,14 +64,64 @@
 
   when: glpi_update and glpiinstalled
 
-- name: Automatic installation
-  command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
-  args:
-    chdir: "{{ glpi_install_path }}/glpi"
+  block:
+
+    - name: Automatic installation
+      command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
+      args:
+        chdir: "{{ glpi_install_path }}/glpi"
+      notify:
+        - Remove install.php
+        - Add htaccess
+    
+    - name: 'Create {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ glpi_web_owner }}"
+        group: "{{ glpi_web_group }}"
+        mode: 064
+      loop:
+        - '{{ glpi_var_dir }}'  
+        - '{{ glpi_log_dir }}'  
+
+    - name: Configure inc/downstream.php file
+      template:
+        src: "inc/downstream.php.j2"
+        dest: "{{ glpi_install_path }}/inc"
+        owner: "{{ glpi_web_owner }}"
+        group: "{{ glpi_web_group }}"
+        mode: 0644
+
+    - name: 'Configure {{ glpi_config_dir }}local_define.php file'
+      template:
+        src: "etc/glpi/local_define.php.j2"
+        dest: "{{ glpi_config_dir }}"
+        owner: "{{ glpi_web_owner }}"
+        group: "{{ glpi_web_group }}"
+        mode: 0644
+
+    - name: 'Copy config_db.php and glpicrypt.key to new config directory'
+      copy:
+        src: "{{ glpi_install_path }}/config/{{ item }}"
+        dest: "{{ glpi_conf_dir }}/"
+        remote_src: True
+        owner: "{{ glpi_web_owner }}"
+        group: "{{ glpi_web_group }}"
+        mode: 0644
+      loop: 
+        - config_db.php
+        - glpicrypt.key
+
+    - name: 'Copy config_db.php and glpicrypt.key to new config directory'
+      file:
+        path: "{{ glpi_install_path }}/config/{{ item }}"
+        state: absent
+      loop: 
+        - config_db.php
+        - glpicrypt.key
+
   when: ( not glpiinstalled.stat.exists ) and glpi_auto_install
-  notify:
-    - Remove install.php
-    - Add htaccess
 
 - name: Set permisions to files directory
   file:
