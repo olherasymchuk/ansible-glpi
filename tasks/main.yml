@@ -74,21 +74,22 @@
         - Remove install.php
         - Add htaccess
     
-    - name: 'Create {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
+    - name: 'Create {{ glpi_config_dir }}, {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
       file:
         path: "{{ item }}"
         state: directory
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
-        mode: 064
+        mode: 0644
       loop:
         - '{{ glpi_var_dir }}'  
         - '{{ glpi_log_dir }}'  
+        - '{{ glpi_config_dir }}'  
 
     - name: Configure inc/downstream.php file
       template:
         src: "inc/downstream.php.j2"
-        dest: "{{ glpi_install_path }}/inc"
+        dest: "{{ glpi_install_path }}/glpi/inc/downstream.php"
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
         mode: 0644
@@ -96,15 +97,15 @@
     - name: 'Configure {{ glpi_config_dir }}local_define.php file'
       template:
         src: "etc/glpi/local_define.php.j2"
-        dest: "{{ glpi_config_dir }}"
+        dest: "{{ glpi_config_dir }}/local_define.php"
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
         mode: 0644
 
     - name: 'Copy config_db.php and glpicrypt.key to new config directory'
       copy:
-        src: "{{ glpi_install_path }}/config/{{ item }}"
-        dest: "{{ glpi_conf_dir }}/"
+        src: "{{ glpi_install_path }}/glpi/config/{{ item }}"
+        dest: "{{ glpi_config_dir }}/"
         remote_src: True
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
@@ -113,9 +114,9 @@
         - config_db.php
         - glpicrypt.key
 
-    - name: 'Copy config_db.php and glpicrypt.key to new config directory'
+    - name: 'Remove config_db.php and glpicrypt.key from old location'
       file:
-        path: "{{ glpi_install_path }}/config/{{ item }}"
+        path: "{{ glpi_install_path }}/glpi/config/{{ item }}"
         state: absent
       loop: 
         - config_db.php
@@ -123,18 +124,18 @@
 
   when: ( not glpiinstalled.stat.exists ) and glpi_auto_install
 
-- name: Set permisions to files directory
-  file:
-    path: "{{ glpi_install_path }}/glpi/files"
-    recurse: true
-    owner: "{{ glpi_web_owner }}"
-    group: "{{ glpi_web_group }}"
-  when: not glpiinstalled.stat.exists or glpi_update
+# - name: Set permisions to files directory
+#   file:
+#     path: "{{ glpi_install_path }}/glpi/files"
+#     recurse: true
+#     owner: "{{ glpi_web_owner }}"
+#     group: "{{ glpi_web_group }}"
+#   when: not glpiinstalled.stat.exists or glpi_update
 
-- name: Set permisions to config directory
-  file:
-    path: "{{ glpi_install_path }}/glpi/config"
-    recurse: true
-    owner: "{{ glpi_web_owner }}"
-    group: "{{ glpi_web_group }}"
-  when: not glpiinstalled.stat.exists or glpi_update
+# - name: Set permisions to config directory
+#   file:
+#     path: "{{ glpi_install_path }}/glpi/config"
+#     recurse: true
+#     owner: "{{ glpi_web_owner }}"
+#     group: "{{ glpi_web_group }}"
+#   when: not glpiinstalled.stat.exists or glpi_update
