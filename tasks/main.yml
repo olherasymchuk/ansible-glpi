@@ -41,21 +41,13 @@
   when: ( not glpiinstalled.stat.exists ) and glpi_auto_install
   block:
 
-    - name: Automatic installation
-      command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
-      args:
-        chdir: "{{ glpi_install_path }}/glpi"
-      notify:
-        - Remove install.php
-        - Add htaccess
-    
     - name: 'Create {{ glpi_config_dir }}, {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
       file:
         path: "{{ item }}"
         state: directory
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
-        mode: 0644
+        mode: 0755
       loop:
         - '{{ glpi_var_dir }}'  
         - '{{ glpi_log_dir }}'  
@@ -89,3 +81,18 @@
         - config
         - files
 
+    - name: Automatic installation
+      command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
+      args:
+        chdir: "{{ glpi_install_path }}/glpi"
+      notify:
+        - Remove install.php
+        - Add htaccess
+
+- name: Fix permissions in log files
+  file:
+    path: "{{ glpi_log_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ glpi_web_owner }}"
+    group: "{{ glpi_web_group }}"
