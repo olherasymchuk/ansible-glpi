@@ -4,7 +4,7 @@
     path: "{{ glpi_install_path }}/glpi"
   register: glpiinstalled
 
-- name: Download and extract GLPI
+- name: Download and extract GLPI and configure inc/downstream.php file
   when: not glpiinstalled.stat.exists or glpi_update
   block:
 
@@ -28,17 +28,8 @@
         group: "{{ glpi_web_group }}"
         mode: 0644
 
-- name: Automatic update
-  when: glpi_update
-  command: "php bin/console db:update --no-telemetry --no-interaction"
-  args:
-    chdir: "{{ glpi_install_path }}/glpi"
-  notify:
-    - Remove install.php
-    - Add htaccess
-
-- name: Automatic installation and files and directories locations
-  when: ( not glpiinstalled.stat.exists ) and glpi_auto_install
+- name: Configuring files and directories locations
+  when: ( not glpiinstalled.stat.exists )
   block:
 
     - name: 'Create {{ glpi_config_dir }}, {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
@@ -81,13 +72,23 @@
         - config
         - files
 
-    - name: Automatic installation
-      command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
-      args:
-        chdir: "{{ glpi_install_path }}/glpi"
-      notify:
-        - Remove install.php
-        - Add htaccess
+- name: Automatic update
+  when: glpi_update
+  command: "php bin/console db:update --no-telemetry --no-interaction"
+  args:
+    chdir: "{{ glpi_install_path }}/glpi"
+  notify:
+    - Remove install.php
+    - Add htaccess
+
+- name: Automatic installation
+  command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
+  args:
+    chdir: "{{ glpi_install_path }}/glpi"
+  notify:
+    - Remove install.php
+    - Add htaccess
+  when: ( not glpiinstalled.stat.exists ) and glpi_auto_install
 
 - name: Fix permissions in log files
   file:
