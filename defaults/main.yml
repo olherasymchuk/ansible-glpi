@@ -14,6 +14,14 @@ glpi_config_dir: /etc/glpi/
 glpi_var_dir: /var/lib/glpi/
 glpi_log_dir: /var/log/glpi/
 
+glpi_api_user: glpi
+
+glpi_plugins_dl_addr:
+  - "https://github.com/fusioninventory/fusioninventory-for-glpi/releases/download/glpi9.4%2B2.3/fusioninventory-9.4+2.3.tar.bz2"
+
+glpi_plugins_name:
+  - fusioninventory
+
 glpi_db_host: "localhost"
 glpi_db_port: "3306"
 glpi_db_name: "glpi"

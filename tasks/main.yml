@@ -97,3 +97,22 @@
     recurse: yes
     owner: "{{ glpi_web_owner }}"
     group: "{{ glpi_web_group }}"
+
+- name: GLPI plugins support
+  when: glpi_plugins is defined
+  block:
+
+    - name: Download and unarchive plugins
+      unarchive:
+        src: "{{ item }}"
+        dest: "{{ glpi_install_path }}/glpi/plugins"
+        owner: "{{ glpi_web_owner }}"
+        group: "{{ glpi_web_group }}"
+        remote_src: true
+      loop: "{{ glpi_plugins | community.general.json_query('[*].src') | list }}"
+
+    - name: Install plugins
+      command: "php bin/console glpi:plugin:install {{ item }} -u {{ glpi_api_user }}"
+      args:
+        chdir: "{{ glpi_install_path }}/glpi"
+      loop: "{{ glpi_plugins | community.general.json_query('[*].name') | list }}"
