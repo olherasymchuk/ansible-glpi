@@ -60,9 +60,14 @@ glpi_install_path: /var/www
 ```
 For security reasons, according [official documentation](https://glpi-install.readthedocs.io/en/latest/install/index.html#files-and-directories-locations), this role configure `files` and `config` directories and logs on custom locations, by default:
 ```yml
-glpi_config_dir: /etc/glpi/
-glpi_var_dir: /var/lib/glpi/
-glpi_log_dir: /var/log/glpi/
+glpi_config_dir: /etc/glpi
+glpi_var_dir: /var/lib/glpi
+glpi_log_dir: /var/log/glpi
+```
+Set name and source URL to install and activate plugins (disable by default):
+```yaml
+glpi_plugins:
+  - { name: plugin_name, src: "plugin_url" }
 ```
 Information about the GLPI database.
 ```yml
