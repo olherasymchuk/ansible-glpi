@@ -34,7 +34,7 @@
   when: ( not glpiinstalled.stat.exists )
   block:
 
-    - name: 'Create {{ glpi_config_dir }}, {{ glpi_var_dir }} and {{ glpi_var_dir }} directories'
+    - name: 'Create config directories'
       file:
         path: "{{ item }}"
         state: directory
@@ -45,6 +45,7 @@
         - '{{ glpi_var_dir }}'  
         - '{{ glpi_log_dir }}'  
         - '{{ glpi_config_dir }}'  
+        - '{{ glpi_marketplace_dir }}'  
 
     - name: 'Configure {{ glpi_config_dir }}local_define.php file'
       template:

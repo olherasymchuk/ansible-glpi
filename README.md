@@ -58,11 +58,12 @@ glpi_web_owner: "www-data"
 glpi_web_group: "www-data"
 glpi_install_path: /var/www
 ```
-For security reasons, according [official documentation](https://glpi-install.readthedocs.io/en/latest/install/index.html#files-and-directories-locations), this role configure `files` and `config` directories and logs on custom locations, by default:
+For security reasons, according [official documentation](https://glpi-install.readthedocs.io/en/latest/install/index.html#files-and-directories-locations), this role configure some directories (`files`, `config`, `marketplace` and `logs`) on custom locations, by default:
 ```yml
 glpi_config_dir: /etc/glpi
 glpi_var_dir: /var/lib/glpi
 glpi_log_dir: /var/log/glpi
+glpi_marketplace_dir: /var/lib/glpi/marketplace
 ```
 Set name and source URL to install and activate plugins (disable by default):
 ```yaml
