@@ -70,6 +70,10 @@ Set name and source URL to install and activate plugins (disable by default):
 glpi_plugins:
   - { name: plugin_name, src: "plugin_url" }
 ```
+To install plugins is also necesary admin username. Add this global variable:
+```yaml
+glpi_api_user: glpi
+```
 Information about the GLPI database.
 ```yml
 glpi_db_host: "localhost"
