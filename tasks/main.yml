@@ -19,6 +19,8 @@
         remote_src: true
         dest: "{{ glpi_install_path }}"
         validate_certs: false
+        owner: "{{ glpi_download_owner }}"
+        group: "{{ glpi_download_group }}"
 
     - name: Configure inc/downstream.php file
       template:
