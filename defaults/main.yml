@@ -21,7 +21,8 @@ glpi_marketplace_dir: /var/lib/glpi/marketplace
 glpi_api_user: glpi
 
 glpi_plugins: []
-  # - { name: formcreator, src: "https://github.com/pluginsGLPI/formcreator/releases/download/2.13.9/glpi-formcreator-2.13.9.tar.bz2" }
+  # - name: formcreator
+  #   src: "https://github.com/pluginsGLPI/formcreator/releases/download/2.13.9/glpi-formcreator-2.13.9.tar.bz2"
 
 glpi_db_host: "localhost"
 glpi_db_port: "3306"

@@ -68,7 +68,8 @@ glpi_marketplace_dir: /var/lib/glpi/marketplace
 Set name and source URL to install and activate plugins (disable by default):
 ```yaml
 glpi_plugins:
-  - { name: plugin_name, src: "plugin_url" }
+  - name: plugin_name
+    src: "plugin_url"
 ```
 To install plugins is also necesary admin username. Add this global variable:
 ```yaml

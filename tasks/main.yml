@@ -107,24 +107,24 @@
 
     - name: Download and unarchive plugins
       unarchive:
-        src: "{{ item }}"
+        src: "{{ item.src }}"
         dest: "{{ glpi_install_path }}/glpi/plugins"
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
         remote_src: true
-      loop: "{{ glpi_plugins | community.general.json_query('[*].src') | list }}"
+      with_items: "{{ glpi_plugins }}"
 
     - name: Install plugins
-      command: "php bin/console glpi:plugin:install {{ item }} -u {{ glpi_api_user }} --force"
+      command: "php bin/console glpi:plugin:install {{ item.name }} -u {{ glpi_api_user }} --force"
       args:
         chdir: "{{ glpi_install_path }}/glpi"
-      loop: "{{ glpi_plugins | community.general.json_query('[*].name') | list }}"
+      with_items: "{{ glpi_plugins }}"
 
     - name: Activate plugins
-      command: "php bin/console glpi:plugin:activate {{ item }}"
+      command: "php bin/console glpi:plugin:activate {{ item.name }}"
       args:
         chdir: "{{ glpi_install_path }}/glpi"
-      loop: "{{ glpi_plugins | community.general.json_query('[*].name') | list }}"
+      with_items: "{{ glpi_plugins }}"
 
     - name: "Fix permissions in {{ glpi_var_dir }}_plugins directory"
       file:
