@@ -12,7 +12,7 @@
       file:
         path: "{{ glpi_install_path }}/glpi"
         state: absent
-    
+
     - name: Download and extract
       unarchive:
         src: "{{ glpi_download_url }}"
@@ -42,10 +42,10 @@
         group: "{{ glpi_web_group }}"
         mode: 0755
       loop:
-        - '{{ glpi_var_dir }}'  
-        - '{{ glpi_log_dir }}'  
-        - '{{ glpi_config_dir }}'  
-        - '{{ glpi_marketplace_dir }}'  
+        - '{{ glpi_var_dir }}'
+        - '{{ glpi_log_dir }}'
+        - '{{ glpi_config_dir }}'
+        - '{{ glpi_marketplace_dir }}'
 
     - name: 'Configure {{ glpi_config_dir }}local_define.php file'
       template:
@@ -59,19 +59,19 @@
       copy:
         src: "{{ glpi_install_path }}/glpi/{{ item.src }}/"
         dest: "{{ item.dest }}/"
-        remote_src: True
+        remote_src: true
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
         mode: preserve
-      loop: 
-        - { src: config, dest: "{{ glpi_config_dir }}"}
-        - { src: files, dest: "{{ glpi_var_dir }}"}
+      loop:
+        - { src: config, dest: "{{ glpi_config_dir }}" }
+        - { src: files, dest: "{{ glpi_var_dir }}" }
 
     - name: 'Remove config and files directories from default location'
       file:
         path: "{{ glpi_install_path }}/glpi/{{ item }}"
         state: absent
-      loop: 
+      loop:
         - config
         - files
 
@@ -97,7 +97,7 @@
   file:
     path: "{{ glpi_log_dir }}"
     state: directory
-    recurse: yes
+    recurse: true
     owner: "{{ glpi_web_owner }}"
     group: "{{ glpi_web_group }}"
 
@@ -130,6 +130,6 @@
       file:
         path: "{{ glpi_var_dir }}/_plugins"
         state: directory
-        recurse: yes
+        recurse: true
         owner: "{{ glpi_web_owner }}"
         group: "{{ glpi_web_group }}"
