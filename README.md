@@ -47,7 +47,8 @@ Set to "true" if you want to perform the final installation automatically. It co
 ```yml
 glpi_auto_install: false
 ```
-Set glpi_update to "true" if you want to force an reinstallation. The URL use the glpi_version an the package name.
+Set glpi_update to "true" if you want to force an reinstallation. The URL use the glpi_version an the package name. The update only performs if plugins are managed by this role (i.e: `glpi_plugins` are defined).
+**Warning: This role no make database backup.!!**
 ```yml
 glpi_update: false
 glpi_download_url: "https://github.com/glpi-project/glpi/releases/download/{{ glpi_version }}/{{ glpi_version_package }}"
