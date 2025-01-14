@@ -64,8 +64,8 @@
         group: "{{ glpi_web_group }}"
         mode: preserve
       loop:
-        - { src: config, dest: "{{ glpi_config_dir }}" }
-        - { src: files, dest: "{{ glpi_var_dir }}" }
+        - {src: config, dest: "{{ glpi_config_dir }}"}
+        - {src: files, dest: "{{ glpi_var_dir }}"}
 
     - name: 'Remove config and files directories from default location'
       file:
