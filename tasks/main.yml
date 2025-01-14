@@ -5,7 +5,7 @@
   register: glpiinstalled
 
 - name: Download and extract GLPI and configure inc/downstream.php file
-  when: not glpiinstalled.stat.exists or glpi_update
+  when: not glpiinstalled.stat.exists or ( glpi_update and glpi_plugins is defined )
   block:
 
     - name: Remove GLPI web files
@@ -76,7 +76,7 @@
         - files
 
 - name: Automatic update
-  when: glpi_update
+  when: glpi_update and glpi_plugins is defined
   command: "php bin/console db:update --no-telemetry --no-interaction"
   args:
     chdir: "{{ glpi_install_path }}/glpi"
