@@ -10,6 +10,20 @@ glpi_web_owner: "www-data"
 glpi_web_group: "www-data"
 glpi_install_path: /var/www
 
+glpi_download_owner: "nobody"
+glpi_download_group: "nogroup"
+
+glpi_config_dir: /etc/glpi
+glpi_var_dir: /var/lib/glpi
+glpi_log_dir: /var/log/glpi
+glpi_marketplace_dir: /var/lib/glpi/marketplace
+
+glpi_api_user: glpi
+
+# glpi_plugins:
+# - name: formcreator
+#   src: "https://github.com/pluginsGLPI/formcreator/releases/download/2.13.9/glpi-formcreator-2.13.9.tar.bz2"
+
 glpi_db_host: "localhost"
 glpi_db_port: "3306"
 glpi_db_name: "glpi"
