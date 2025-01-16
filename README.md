@@ -47,7 +47,8 @@ Set to "true" if you want to perform the final installation automatically. It co
 ```yml
 glpi_auto_install: false
 ```
-Set glpi_update to "true" if you want to force an reinstallation. The URL use the glpi_version an the package name.
+Set glpi_update to "true" if you want to force an reinstallation. The URL use the glpi_version an the package name. The update only performs if plugins are managed by this role (i.e: `glpi_plugins` are defined).
+**Warning: This role no make database backup.!!**
 ```yml
 glpi_update: false
 glpi_download_url: "https://github.com/glpi-project/glpi/releases/download/{{ glpi_version }}/{{ glpi_version_package }}"
@@ -58,11 +59,22 @@ glpi_web_owner: "www-data"
 glpi_web_group: "www-data"
 glpi_install_path: /var/www
 ```
-For security reasons, according [official documentation](https://glpi-install.readthedocs.io/en/latest/install/index.html#files-and-directories-locations), this role configure `files` and `config` directories and logs on custom locations, by default:
+For security reasons, according [official documentation](https://glpi-install.readthedocs.io/en/latest/install/index.html#files-and-directories-locations), this role configure some directories (`files`, `config`, `marketplace` and `logs`) on custom locations, by default:
 ```yml
-glpi_config_dir: /etc/glpi/
-glpi_var_dir: /var/lib/glpi/
-glpi_log_dir: /var/log/glpi/
+glpi_config_dir: /etc/glpi
+glpi_var_dir: /var/lib/glpi
+glpi_log_dir: /var/log/glpi
+glpi_marketplace_dir: /var/lib/glpi/marketplace
+```
+Set name and source URL to install and activate plugins (disable by default):
+```yaml
+glpi_plugins:
+  - name: plugin_name
+    src: "plugin_url"
+```
+To install plugins is also necesary admin username. Add this global variable:
+```yaml
+glpi_api_user: glpi
 ```
 Information about the GLPI database.
 ```yml
