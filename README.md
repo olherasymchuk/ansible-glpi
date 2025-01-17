@@ -47,8 +47,10 @@ Set to "true" if you want to perform the final installation automatically. It co
 ```yml
 glpi_auto_install: false
 ```
-Set glpi_update to "true" if you want to force an reinstallation. The URL use the glpi_version an the package name. The update only performs if plugins are managed by this role (i.e: `glpi_plugins` are defined).
-**Warning: This role no make database backup.!!**
+Set glpi_update to "true" if you want to force an reinstallation or update. The URL use the glpi_version in the package name. 
+
+> [!WARNING]
+> role doesn't backup database during deployments
 ```yml
 glpi_update: false
 glpi_download_url: "https://github.com/glpi-project/glpi/releases/download/{{ glpi_version }}/{{ glpi_version_package }}"
@@ -66,7 +68,10 @@ glpi_var_dir: /var/lib/glpi
 glpi_log_dir: /var/log/glpi
 glpi_marketplace_dir: /var/lib/glpi/marketplace
 ```
-Set name and source URL to install and activate plugins (disable by default):
+Set name and source URL to manage plugins with this role
+
+> [!WARNING]
+> role doesn't backup database during deployments
 ```yaml
 glpi_plugins:
   - name: plugin_name
